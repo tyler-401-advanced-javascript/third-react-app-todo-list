@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import classNames from 'classnames'
 import './TodoList.scss'
+import useFetch from '../../hooks/useFetch'
+import uniqid from 'uniqid'
+
+
+const URL = 'http://localhost:3000/todos'
 
 const Filter = {
   ALL: 'ALL',
@@ -12,72 +17,91 @@ const filterMenu = {
   [Filter.DONE]: true,
   [Filter.TODO]: false,
 }
+
+// api functions
+async function postNewTodo(data) {
+  await fetch(URL, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+}
+
+//react component
 function TodoList() {
-  const [dones, setDones] = useState([])
-  const [todos, setTodos] = useState([])
-  const [input, setInput] = useState('')
+  // const [todos, setTodos] = useState([])
+  const [input, setInput] = useState({})
   const [showing, setShowing] = useState(Filter.ALL)
+
+  //custom hooks
+  const [todos, loading] = useFetch();
+
 
   useEffect(() => {
     updateTitle()
   })
 
   const updateTitle = () => {
-    document.title = `Todo's: ${todos.length - dones.length}`;
+    document.title = `Todo's: ${todos.filter(item => !item.complete).length}`;
   }
 
-  const handleFinishItem = (item) => {
-    item.complete = !item.complete
-    if (!dones.includes(item)) setDones([...dones, item])
+  const handleFinishItem = (id) => {
+    //spread todos into new variable. 
+    //update the value you want
+    //then setTodos(newTodos);
+
+    const newTodos = [...todos];
+    const previous = todos.find((todo) => todo.id === id);
+    newTodos[todos.indexOf(previous)] = { ...previous, complete: !previous.complete };
+    // setTodos(newTodos);
+
+    //send put request for complete item. 
+
+
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const [item, difficulty] = input.split(';')
-    setTodos([...todos, { item, difficulty, complete: false }])
-    setInput('')
+    e.target.reset();
+    const { name, difficulty, time } = input
+    const newTodo = { id: uniqid(), name, difficulty, time, complete: false }
+
+
+    //send post request for new todo
+    await postNewTodo(newTodo);
+
+    // setTodos(newTodos)
+
+
+    //get ready for next input.
+    setInput({});
   }
 
   const handleChange = (e) => {
-    setInput(e.target.value)
+    //key:  "name" || "difficulty" || "time"
+    //value: <string>
+    setInput({ ...input, [e.target.name]: e.target.value })
   }
 
   const filterResults = (filter) => {
     setShowing(filter);
   }
 
-  const filterDisplay = () => {
-    console.log(filterMenu[showing])
-
-    //if we are to filter..
-    if (filterMenu[showing] === false || filterMenu[showing] === true) {
-      return function (todos) {
-        return todos.filter(item => item.complete === filterMenu[showing]).map((item, i) => (
-            <li key={i} className={classNames('todoItem', { done: item.complete })}>
-            Thing: {item.item}, Difficulty: {item.difficulty}
-            <input type="button" className="doneButton" onClick={() => handleFinishItem(item)}></input>
-          </li>
-          ))
-      }
-      //else show all
-    } else 
-      return function (todos) {
-        return todos.map((item, i) => (
-            <li key={i} className={classNames('todoItem', { done: item.complete })}>
-              Thing: {item.item}, Difficulty: {item.difficulty}
-              <input type="button" className="doneButton" onClick={() => handleFinishItem(item)}></input>
-            </li>
-          ))
-      }
-    }
+  const filteredTodos = filterMenu[showing] === false || filterMenu[showing] === true ?
+    todos.filter(item => item.complete === filterMenu[showing]) : todos;
 
   return (
     <div id="todoList">
-      <div className="form">
+      <div className="form" onSubmit={handleSubmit}>
         <form>
-          <input type="text" placeholder="Thing to do..." value={input} onChange={handleChange}></input>
-          <input type="submit" value="Create!" onClick={handleSubmit} />
+          <input type="text" placeholder="Thing to do..." name="name" value={input.name} onChange={handleChange}></input>
+          <input type="text" placeholder="Difficulty" name="difficulty" value={input.difficulty} onChange={handleChange}></input>
+          <input type="text" placeholder="Time Needed" name="time" value={input.time} onChange={handleChange}></input>
+          <input type="submit" value="Create!" />
         </form>
+
         <div className="select">
           <div className={classNames("option", { selected: showing === Filter.ALL })} onClick={() => filterResults(Filter.ALL)}>All</div>
           <div className={classNames("option", { selected: showing === Filter.DONE })} onClick={() => filterResults(Filter.DONE)}>Done</div>
@@ -85,9 +109,17 @@ function TodoList() {
         </div>
       </div>
 
-      <ul className="list">
-        { filterDisplay()(todos) }
-      </ul>
+      { loading ? <p>Im loading, be patient</p> :
+        (
+          <ul className="list">
+            {filteredTodos.map((item, i) => {
+              return <li key={i} className={classNames('todoItem', { done: item.complete })}>
+                Name: {item.name}, Difficulty: {item.difficulty}, Time: {item.time}
+                <input type="button" className="doneButton" onClick={() => handleFinishItem(item.id)}></input>
+              </li>
+            })}
+          </ul>
+        )}
     </div>
   )
 
