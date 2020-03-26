@@ -1,6 +1,12 @@
-#header {
+.header {
   
-  background-image: linear-gradient(rgb(16, 16, 119), blue) ;
+  background-image: linear-gradient(rgb(16, 16, 119), rgb(24, 84, 196)) ;
   color: white;
 
+  
 }
+    .dark {
+      background-image: none;
+      background-color: hsl(83, 22%, 14%);
+      color: rgb(221, 220, 214);
+    }

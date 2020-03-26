@@ -20,6 +20,38 @@ export default function useFetch() {
     }
   }
 
+  const updateTodos = async (data) => {
+    //maybe set an in-button spinner
+
+    //send a request to update the todo in question
+    const url =`${URL}/${data.id}`;
+
+    console.log('the url is : ', url)
+
+    const raw = await fetch(url, {
+      method: 'PUT',
+      headers: { "Content-Type": 'application/json' },
+      body: JSON.stringify(data)
+    })
+    //return the new info
+    return await raw.json();
+  }
+
+  async function postNewTodo(data) {
+    const raw = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+    const response = await raw.json();
+
+    //set the new todos is good response. On next refresh, todos will get set straight from API, but in mean time we can pencil in the new entry. 
+    setTodos([...todos, response])
+
+  }
+
   // this useEffect only runs when todos = [] (initial run)
   useEffect(() => {
     getTodos();
@@ -30,5 +62,8 @@ export default function useFetch() {
   return [
     todos,
     loading,
+    setTodos,
+    updateTodos,
+    postNewTodo
   ]
 }

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import classNames from 'classnames'
 import './TodoList.scss'
 import useFetch from '../../hooks/useFetch'
 import uniqid from 'uniqid'
+import ToggleTheme from '../ToggleTheme/ToggleTheme'
 
-
-const URL = 'http://localhost:3000/todos'
+//contexts
+import { ThemeContext } from '../../context/Theme'
 
 const Filter = {
   ALL: 'ALL',
@@ -18,26 +19,17 @@ const filterMenu = {
   [Filter.TODO]: false,
 }
 
-// api functions
-async function postNewTodo(data) {
-  await fetch(URL, {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-}
-
 //react component
 function TodoList() {
   // const [todos, setTodos] = useState([])
   const [input, setInput] = useState({})
   const [showing, setShowing] = useState(Filter.ALL)
 
-  //custom hooks
-  const [todos, loading] = useFetch();
+  //context
+  const theme = useContext(ThemeContext)
 
+  //custom hooks
+  const [todos, loading, setTodos, updateTodos, postNewTodo] = useFetch();
 
   useEffect(() => {
     updateTitle()
@@ -47,19 +39,18 @@ function TodoList() {
     document.title = `Todo's: ${todos.filter(item => !item.complete).length}`;
   }
 
-  const handleFinishItem = (id) => {
-    //spread todos into new variable. 
-    //update the value you want
-    //then setTodos(newTodos);
-
+  const handleFinishItem = async (id) => {
     const newTodos = [...todos];
     const previous = todos.find((todo) => todo.id === id);
-    newTodos[todos.indexOf(previous)] = { ...previous, complete: !previous.complete };
-    // setTodos(newTodos);
 
     //send put request for complete item. 
+    const response = await updateTodos({ ...previous, complete: !previous.complete })
 
+    //update newTodos
+    newTodos[todos.indexOf(previous)] = response;
 
+    //set the state
+    setTodos(newTodos);
   }
 
   const handleSubmit = async (e) => {
@@ -67,13 +58,8 @@ function TodoList() {
     e.target.reset();
     const { name, difficulty, time } = input
     const newTodo = { id: uniqid(), name, difficulty, time, complete: false }
-
-
     //send post request for new todo
     await postNewTodo(newTodo);
-
-    // setTodos(newTodos)
-
 
     //get ready for next input.
     setInput({});
@@ -93,36 +79,48 @@ function TodoList() {
     todos.filter(item => item.complete === filterMenu[showing]) : todos;
 
   return (
-    <div id="todoList">
-      <div className="form" onSubmit={handleSubmit}>
+    <div className={classNames('todoList', { dark: theme.darkMode })} onSubmit={handleSubmit}>
+      <div className={classNames('form', { dark: theme.darkMode })} onSubmit={handleSubmit}>
         <form>
           <input type="text" placeholder="Thing to do..." name="name" value={input.name} onChange={handleChange}></input>
           <input type="text" placeholder="Difficulty" name="difficulty" value={input.difficulty} onChange={handleChange}></input>
           <input type="text" placeholder="Time Needed" name="time" value={input.time} onChange={handleChange}></input>
           <input type="submit" value="Create!" />
         </form>
-
         <div className="select">
-          <div className={classNames("option", { selected: showing === Filter.ALL })} onClick={() => filterResults(Filter.ALL)}>All</div>
-          <div className={classNames("option", { selected: showing === Filter.DONE })} onClick={() => filterResults(Filter.DONE)}>Done</div>
-          <div className={classNames("option", { selected: showing === Filter.TODO })} onClick={() => filterResults(Filter.TODO)}>To Do</div>
+          <div
+            className={classNames("option", { selected: showing === Filter.TODO })}
+            onClick={() => filterResults(Filter.TODO)}
+          >To Do</div>
+          <div
+            className={classNames("option", { selected: showing === Filter.DONE })}
+            onClick={() => filterResults(Filter.DONE)}
+          >Done</div>
+          <div
+            className={classNames("option", { selected: showing === Filter.ALL })}
+            onClick={() => filterResults(Filter.ALL)}
+          >All</div>
         </div>
+        <ToggleTheme />
       </div>
 
-      { loading ? <p>Im loading, be patient</p> :
-        (
-          <ul className="list">
-            {filteredTodos.map((item, i) => {
-              return <li key={i} className={classNames('todoItem', { done: item.complete })}>
-                Name: {item.name}, Difficulty: {item.difficulty}, Time: {item.time}
-                <input type="button" className="doneButton" onClick={() => handleFinishItem(item.id)}></input>
-              </li>
-            })}
-          </ul>
-        )}
+
+      <div className={classNames("container", { dark: theme.darkMode })}>
+
+        {loading ? <p>Loading...</p> :
+          (
+            <ul className="list">
+              {filteredTodos.map((item, i) => {
+                return <li key={i} className={classNames('todoItem', { done: item.complete })}>
+                  Name: {item.name}, Difficulty: {item.difficulty}, Time: {item.time}
+                  <input type="button" className="doneButton" onClick={() => handleFinishItem(item.id)} value={item.complete ? 'Oops' : 'Finish'}></input>
+                </li>
+              })}
+            </ul>
+          )}
+      </div>
     </div>
   )
-
 }
 
 export default TodoList

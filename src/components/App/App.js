@@ -3,20 +3,21 @@ import './App.scss'
 import Header from '../Header/Header.js'
 import TodoList from '../TodoList/TodoList.js'
 import Footer from '../Footer/Footer.js'
+import classNames from 'classnames'
 
-
-import './App.scss';
+//contexts
+import Theme from '../../context/Theme'
 
 function App() {
 
-  //functions here.
-
   return (
-    <div className="App">
-     <Header />
-     <TodoList />
-     <Footer />
-    </div>
+    <Theme>
+      <div className={classNames("App")} >
+        <Header />
+        <TodoList />
+        <Footer />
+      </div>
+    </Theme>
   );
 }
 
