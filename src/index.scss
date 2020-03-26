@@ -1,15 +1,21 @@
 * {
   font-family: Arial, Helvetica, sans-serif;
-  color: rgb(57, 59, 45);
+
   // border: thin red solid;
   box-sizing: border-box;
+
+}
+
+.dark {
+  background-image: none;
+  background-color: hsl(83, 22%, 14%);
 }
 
 #root {
   border: none;
   margin: none;
   padding: none;
-  background-color: rgb(66, 66, 66);
+  background-color: rgb(63, 65, 63);
   display: flex;
   justify-content: center;
 }
