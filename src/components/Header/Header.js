@@ -1,16 +1,32 @@
-import React, { useContext } from 'react'
-import classNames from 'classnames'
+import React, { useContext, useState } from 'react'
+import { AuthMichContext } from '../../context/AuthMich'
+
 import './Header.scss'
 
 //contexts
-import { ThemeContext } from '../../context/Theme'
-
 function Header() {
-  const theme = useContext(ThemeContext)
-  console.log(theme.darkMode);
+  const [input, setInput] = useState({})
+  const { user, loggedIn, login } = useContext(AuthMichContext)
+
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (loggedIn) return;
+    await login(input.username, input.password)
+  }
+
+  const handleChange = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value })
+  }
+
   return (
-    <div class='header' className={classNames('margin', { dark: theme.darkMode })} >
+    <div className='margin header'>
       Super Awesome To-Do List
+      <form onSubmit={submit}>
+        <input type="text" onChange={handleChange} name="username" placeholder="Username"/>
+        <input type="password" onChange={handleChange} name="password" placeholder="Password"/>
+        <input type="submit"></input>
+      </form>
     </div>
   )
 }
