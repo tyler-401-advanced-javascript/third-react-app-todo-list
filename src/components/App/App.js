@@ -4,19 +4,32 @@ import Header from '../Header/Header.js'
 import TodoList from '../TodoList/TodoList.js'
 import Footer from '../Footer/Footer.js'
 import classNames from 'classnames'
-
+import Auth from '../util/Auth'
 //contexts
-import Theme from '../../context/Theme'
+import Theme from '../../context/Settings'
+import AuthMich from '../../context/AuthMich'
+
+const Permission = {
+  READ: 'read',
+  CREATE: 'create',
+  UPDATE: 'update',
+  DELETE: 'delete'
+}
 
 function App() {
 
   return (
+
     <Theme>
-      <div className={classNames("App")} >
-        <Header />
-        <TodoList />
-        <Footer />
-      </div>
+      <AuthMich>
+        <div className={classNames("App")} >
+          <Header />
+          <Auth required={Permission.READ}>
+            <TodoList />
+          </Auth>
+          <Footer />
+        </div>
+      </AuthMich>
     </Theme>
   );
 }

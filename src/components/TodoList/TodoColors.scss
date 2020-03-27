@@ -1,0 +1,86 @@
+$darkBlue: hsl(221, 22%, 14%);
+$buttonBlue: rgb(59, 70, 102);
+$buttonOrange: rgb(179, 148, 103);
+$darkButtonOrange: rgb(143, 119, 83);
+$buttonGrey: rgb(148, 148, 148);
+
+.themeToggle {
+  border: thin grey solid;
+  background-color: $buttonBlue;
+  &:hover {
+    filter: brightness(130%)
+  }
+
+}
+
+.todoList {
+
+  background-color: rgb(207, 207, 207);
+  color: white;
+
+  table {
+    .done {
+      filter: brightness(60%);
+    }
+    tr {
+      color: white;
+      .doneButton {
+        color: navy;
+      }
+    }
+  }
+}
+
+.container {
+  background-color: rgb(207, 207, 207);
+  color: white;
+}
+
+input {
+  color: rgb(46, 59, 54);
+}
+.form {
+  .select {
+    background-color: $buttonBlue;
+    border: 1px grey solid;
+
+    .option {
+      color: white;
+      background-color: $buttonBlue;
+    }
+    .selected {
+      background-color: $buttonOrange;
+    }
+  }
+}
+
+p {
+  color: white;
+}
+
+.dark {
+  background-color: $darkBlue;
+  input {
+    border-color: rgb(46, 47, 59);
+    background-color: rgb(146, 146, 146);
+    color: #2e3b36;
+    &::placeholder{
+      color: #2e3b36;
+    }
+  }
+
+  .select {
+    .selected {
+      background-color: $darkButtonOrange;
+    }
+  }
+  .themeToggle {
+    background-color: $buttonGrey;
+    border: thin rgb(114, 114, 114) solid;
+  }
+  .paginator {
+    button {
+      background-color: $buttonGrey;
+    }
+  }
+}

@@ -11,7 +11,9 @@ export default function useFetch() {
     setLoading(true)
     try {
       const raw = await fetch(URL)
+
       const response = await raw.json();
+      console.log('got here');
       setTodos(response);
     } catch (err) {
       console.log(err, err.message);

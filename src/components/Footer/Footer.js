@@ -1,13 +1,11 @@
-import React, { useContext } from 'react'
-import classNames from 'classnames'
+import React from 'react'
+
 import './Footer.scss'
-import {ThemeContext} from '../../context/Theme'
 
 
 function Footer() {
-  const theme = useContext(ThemeContext)
   return (
-    <div className={classNames("margin", "footer", {dark: theme.darkMode})}>
+    <div className='margin footer'>
       &copy; Tyler Sayvetz and Associates
     </div>
   )

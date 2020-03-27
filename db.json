@@ -15,94 +15,50 @@
       "complete": true
     },
     {
-      "id": "k883xxaq",
-      "name": "Decide what to make",
+      "id": "k88zv887",
+      "name": "Tyler",
+      "complete": false
+    },
+    {
+      "id": "k89a6f3p",
+      "name": "Fluff the pillows",
+      "difficulty": "1",
+      "time": "78",
+      "complete": false
+    },
+    {
+      "id": "k89a6f3q",
+      "name": "Fluff the pillows",
+      "difficulty": "1",
+      "time": "78",
+      "complete": false
+    },
+    {
+      "id": "k89a6sqb",
+      "name": "Learn a new spell",
       "difficulty": "5",
-      "time": "45",
+      "time": "What is magic",
       "complete": false
     },
     {
-      "id": "k884pt6c",
+      "id": "k89a6sqc",
+      "name": "Learn a new spell",
+      "difficulty": "5",
+      "time": "What is magic",
       "complete": false
     },
     {
-      "id": "k884ptab",
-      "complete": false
-    },
-    {
-      "id": "k884ptel",
-      "complete": false
-    },
-    {
-      "id": "k884ptwb",
+      "id": "k89a9vve",
+      "name": "Run like the wind",
+      "difficulty": "2",
+      "time": "1",
       "complete": true
     },
     {
-      "id": "k884pu0x",
-      "complete": true
-    },
-    {
-      "id": "k884pu65",
-      "complete": true
-    },
-    {
-      "id": "k884pu9m",
-      "complete": true
-    },
-    {
-      "id": "k884puej",
-      "complete": true
-    },
-    {
-      "id": "k884puij",
-      "complete": true
-    },
-    {
-      "id": "k884pumn",
-      "complete": true
-    },
-    {
-      "id": "k884puq6",
-      "complete": true
-    },
-    {
-      "id": "k884pvn7",
-      "complete": true
-    },
-    {
-      "id": "k884pvrm",
-      "complete": true
-    },
-    {
-      "id": "k884pw0t",
-      "complete": true
-    },
-    {
-      "id": "k884pw55",
-      "complete": true
-    },
-    {
-      "id": "k884pw90",
-      "complete": true
-    },
-    {
-      "id": "k884pwdd",
-      "complete": true
-    },
-    {
-      "id": "k884pwhr",
-      "complete": true
-    },
-    {
-      "id": "k884pwl7",
-      "complete": true
-    },
-    {
-      "id": "k884pwor",
-      "complete": true
-    },
-    {
-      "id": "k884pwu1",
+      "id": "k89a9vvf",
+      "name": "Run like the wind",
+      "difficulty": "2",
+      "time": "1",
       "complete": true
     }
   ]

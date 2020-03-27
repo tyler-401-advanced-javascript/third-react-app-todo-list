@@ -7,9 +7,18 @@ class Theme extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      darkMode: true,
+      darkMode: false,
+      resultsPerPage: 10,
       toggleTheme: this.changeTheme,
+      setResultsPerPage: this.setResultsPerPage
     }
+  }
+
+  setResultsPerPage = (e) => {
+    e.persist();
+    this.setState({
+      resultsPerPage: parseInt(e.target.value)
+    })
   }
 
   changeTheme = () => {
@@ -25,6 +34,7 @@ class Theme extends React.Component {
       </ThemeContext.Provider>
     )
   }
+
 }
 
 
